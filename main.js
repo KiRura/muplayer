@@ -22,14 +22,20 @@ try {
 config()
 const client = new Client({ intents: Object.values(GatewayIntentBits) })
 const player = new Player(client)
-player.extractors.loadDefault()
-  .then(result => {
-    if (result.success) {
-      logger.info('loaded discord-player extractors')
-    } else {
-      return logger.error(`${result.error.name}\n${result.error.message}\n${result.error.stack}`)
-    }
-  })
+try {
+  await player.extractors.loadDefault()
+  logger.info('loaded discord-player extractors')
+} catch (error) {
+  console.error(error)
+  process.exit()
+}
+// .then(result => {
+//   if (result.success) {
+//     logger.info('loaded discord-player extractors')
+//   } else {
+//     return logger.error(`${result.error.name}\n${result.error.message}\n${result.error.stack}`)
+//   }
+// })
 
 const eventCommands = new Collection()
 const eventFiles = fs.readdirSync('./event').filter(eventFileName => eventFileName.endsWith('.js'))
