@@ -29,13 +29,6 @@ try {
   console.error(error)
   process.exit()
 }
-// .then(result => {
-//   if (result.success) {
-//     logger.info('loaded discord-player extractors')
-//   } else {
-//     return logger.error(`${result.error.name}\n${result.error.message}\n${result.error.stack}`)
-//   }
-// })
 
 const eventCommands = new Collection()
 const eventFiles = fs.readdirSync('./event').filter(eventFileName => eventFileName.endsWith('.js'))
