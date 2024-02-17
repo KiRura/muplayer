@@ -10,7 +10,7 @@ export default {
 
     await client.application.commands.set(args[1][1])
 
-    logger.info('all ready')
+    logger.info(`${client.user.displayName} all ready`)
   }
 }
 
