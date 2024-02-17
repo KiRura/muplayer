@@ -31,7 +31,13 @@ export default {
     if (!await inGuild(interaction)) return
     const player = useMainPlayer()
 
-    const channel = setChannel(interaction.member, interaction.options.getChannel('channel'))
+    const channel = interaction.options.getChannel(
+      'channel',
+      false,
+      [ChannelType.GuildVoice, ChannelType.GuildStageVoice]
+    ) ||
+      interaction.member.voice.channel ||
+      interaction.member.guild.members.me.voice.channel
     if (!channel) return await noChannel(interaction)
     const query = interaction.options.getString('query', true)
     const vol = volume(interaction.options.getInteger('number'))
@@ -50,15 +56,6 @@ function volume (number) {
     return number
   }
   return 30
-}
-
-/**
- *
- * @param {import('discord.js').GuildMember} member
- * @param {import('discord.js').Channel} channel
- */
-function setChannel (member, channel) {
-  return channel || member.voice.channel || member.guild.members.me.voice.channel
 }
 
 /**
