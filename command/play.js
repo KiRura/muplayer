@@ -2,6 +2,8 @@ import { useMainPlayer } from 'discord-player'
 import { ChannelType, EmbedBuilder, SlashCommandBuilder } from 'discord.js'
 import { inGuild } from '../config/in-guild.js'
 import data from '../data.js'
+import { playEmbed } from '../config/play-embed.js'
+// import { rmSync } from 'fs'
 
 export default {
   data: new SlashCommandBuilder()
@@ -31,7 +33,8 @@ export default {
     if (!await inGuild(interaction)) return
     const player = useMainPlayer()
 
-    const channel = interaction.options.getChannel(
+    const channel =
+    interaction.options.getChannel(
       'channel',
       false,
       [ChannelType.GuildVoice, ChannelType.GuildStageVoice]
@@ -42,12 +45,19 @@ export default {
     const query = interaction.options.getString('query', true)
     const vol = volume(interaction.options.getInteger('number'))
 
+    await interaction.deferReply()
     const res = await player.play(channel, query, {
       nodeOptions: {
         volume: vol
       }
     })
-    await interaction.reply('```json\n' + JSON.stringify(res.searchResult.toJSON(), undefined, 2) + '\n```')
+
+    const embed = await playEmbed(res)
+    await interaction.followUp({ embeds: [embed[0]], files: [embed[2]] })
+
+    // for (const path of embed[1]) {
+    //   rmSync(path)
+    // }
   }
 }
 

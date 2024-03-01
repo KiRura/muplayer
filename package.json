@@ -20,7 +20,9 @@
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.4",
     "mediaplex": "^0.0.9",
+    "sharp": "^0.33.2",
     "tslog": "^4.9.2",
+    "undici": "^6.6.2",
     "youtube-ext": "^1.1.16"
   }
 }
