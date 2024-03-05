@@ -37,7 +37,7 @@ export default {
     interaction.reply({
       embeds: [new EmbedBuilder()
         .setTitle(`${queueLength} / ${queue.getSize()}曲`)
-        .setDescription(`${tracks.join('\n')}${queue.getSize() > pageEnd ? `\n**...**\n**他:** ${queue.getSize() - pageEnd}曲` : ''}`)
+        .setDescription(`${tracks.join('\n')}${queue.getSize() > pageEnd ? `\n**...**\n**他:** ${queue.getSize() - pageEnd}曲` : ''}` || null)
         .setColor(data.mutaoColor)
         .setAuthor({ iconURL: queue.currentTrack.thumbnail, name: `再生中: (${streamTime}) ${queue.currentTrack.title.length <= 20 ? queue.currentTrack.title : `${queue.currentTrack.title.substring(0, 20)}...`}`, url: queue.currentTrack.url })
         .setFooter({ text: `ページ: ${page}/${maxPages}` })
