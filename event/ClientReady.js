@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { Logger } from 'tslog'
-import functions from '../functions.js'
-import { ActivityType, Client, EmbedBuilder, Events } from 'discord.js'
-import data from '../data.js'
-import fs from 'fs'
-const logger = new Logger({ hideLogPositionForProduction: true })
+import { Logger } from "tslog";
+import functions from "../functions.js";
+import { ActivityType, Client, EmbedBuilder, Events } from "discord.js";
+import data from "../data.js";
+import fs from "fs";
+const logger = new Logger({ hideLogPositionForProduction: true });
 
 export default {
   name: Events.ClientReady,
@@ -12,10 +12,13 @@ export default {
    * @param {Client<true>} client
    * @param {*} registCommands
    */
-  async execute (client, registCommands) {
+  async execute(client, registCommands) {
     setInterval(async () => {
-      client.user.setActivity({ name: `${(await client.guilds.fetch()).size} servers・${client.users.cache.size} users・${await functions.googlePing()} ms`, type: ActivityType.Custom })
-    }, 30000)
+      client.user.setActivity({
+        name: `${(await client.guilds.fetch()).size} servers・${client.users.cache.size} users・${await functions.googlePing()} ms`,
+        type: ActivityType.Custom
+      });
+    }, 30000);
 
     // logger.info('finding no data generated guild...')
     // for (const guild of (await client.guilds.fetch()).toJSON()) {
@@ -26,30 +29,35 @@ export default {
     //   }
     // }
 
-    logger.info('cleaning nickname data...')
-    const json = JSON.parse(fs.readFileSync('./data/nickname.json'))
+    logger.info("cleaning nickname data...");
+    const json = JSON.parse(fs.readFileSync("./data/nickname.json"));
     for (const guild of json) {
-      client.guilds.fetch(guild.id)
+      client.guilds
+        .fetch(guild.id)
         .then(async fetchGuild => {
-          await fetchGuild.members.me.setNickname(guild.nickname)
+          await fetchGuild.members.me.setNickname(guild.nickname);
         })
-        .catch(_error => {})
+        .catch(_error => {});
     }
-    functions.writeFile('./data/nickname.json', [])
-    logger.info('cleaned nickname data')
+    functions.writeFile("./data/nickname.json", []);
+    logger.info("cleaned nickname data");
 
-    logger.info('setting commands...')
-    await client.application.commands.set(registCommands)
+    logger.info("setting commands...");
+    await client.application.commands.set(registCommands);
 
-    await (await (await client.guilds.fetch('1099309562781245440')).channels.fetch('1146562994688503999')).send({
+    await (
+      await (
+        await client.guilds.fetch("1099309562781245440")
+      ).channels.fetch("1146562994688503999")
+    ).send({
       embeds: [
         new EmbedBuilder()
           .setTitle(`${client.user.displayName}が起動しました。`)
           .setFooter({ text: functions.dateToString(new Date(), true) })
           .setColor(data.mutaoColor)
       ]
-    })
+    });
 
-    logger.info(`${client.user.displayName} ALL READY`)
+    logger.info(`${client.user.displayName} ALL READY`);
   }
-}
+};
